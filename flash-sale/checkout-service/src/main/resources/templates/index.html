@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flash Sale | Checkout</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <script defer th:src="@{/demo.js}"></script>
+</head>
+<body>
+<header class="topbar">
+    <a class="wordmark" href="/">FLASH SALE <span>LAB</span></a>
+    <div class="service-state"><i></i> Checkout local</div>
+</header>
+<main>
+    <section class="heading">
+        <div>
+            <p class="eyebrow">PEDIDOS E RESERVAS</p>
+            <h1>Checkout</h1>
+        </div>
+        <div class="stock-readout">
+            <span th:text="${productId}">PROD-001</span>
+            <strong th:text="${available}">0</strong>
+            <small>unidades disponiveis</small>
+        </div>
+    </section>
+
+    <div class="notice success" th:if="${message}" th:text="${message}"></div>
+    <div class="notice failure" th:if="${error}" th:text="${error}"></div>
+    <section class="notice order-result" id="order-result" th:if="${order}"
+             th:attr="data-order-id=${order.orderId}">
+        <strong id="order-status" th:text="${order.status}">PROCESSING</strong>
+        <span>Pedido <code id="order-id" th:text="${order.orderId}"></code></span>
+        <span id="order-reason" th:if="${order.failureReason}" th:text="${order.failureReason}"></span>
+        <span>Correlation ID <code id="order-correlation-id" th:text="${order.correlationId}"></code></span>
+    </section>
+
+    <section class="workbench">
+        <form class="form-section" method="post" action="/demo/stock">
+            <div class="section-title"><span class="index">01</span><h2>Estoque</h2></div>
+            <label for="stock-product">Produto</label>
+            <input id="stock-product" name="productId" maxlength="80" required th:value="${productId}">
+            <label for="stock-quantity">Quantidade inicial</label>
+            <input id="stock-quantity" name="quantity" type="number" min="0" value="10" required>
+            <button class="button secondary" type="submit">Atualizar estoque</button>
+        </form>
+
+        <form class="form-section" method="post" action="/demo/orders">
+            <div class="section-title"><span class="index">02</span><h2>Novo pedido</h2></div>
+            <label for="order-product">Produto</label>
+            <input id="order-product" name="productId" maxlength="80" required th:value="${productId}">
+            <div class="field-row">
+                <div><label for="order-quantity">Quantidade</label><input id="order-quantity" name="quantity" type="number" min="1" value="1" required></div>
+                <div><label for="customer-cpf">CPF</label><input id="customer-cpf" name="customerCpf" inputmode="numeric" pattern="[0-9]{11}" value="50329291076" required></div>
+            </div>
+            <label for="customer-name">Nome</label>
+            <input id="customer-name" name="customerName" value="Cliente de demonstracao" required>
+            <label class="failure-toggle"><input type="checkbox" name="simulateFailure" value="true"> Simular falha no processamento</label>
+            <label for="failure-reason">Motivo da falha simulada</label>
+            <input id="failure-reason" name="failureReason" value="Falha simulada na aprovacao do pedido">
+            <button class="button primary" type="submit">Enviar pedido</button>
+        </form>
+    </section>
+
+    <section class="lookup">
+        <div><span class="index">03</span><h2>Consultar pedido</h2></div>
+        <form method="get" action="/v1/orders" onsubmit="event.preventDefault(); window.location.href='/v1/orders/' + encodeURIComponent(this.orderId.value)">
+            <label class="visually-hidden" for="lookup-id">Identificador do pedido</label>
+            <input id="lookup-id" name="orderId" placeholder="UUID do pedido" required>
+            <button class="button secondary" type="submit">Consultar status</button>
+        </form>
+    </section>
+    <footer><span>API: <code>localhost:8080</code></span><span>Correlation ID aparece na resposta e nos logs.</span></footer>
+</main>
+</body>
+</html>

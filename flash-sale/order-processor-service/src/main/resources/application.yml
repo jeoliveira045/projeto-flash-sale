@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: order-processor-service
+  datasource:
+    url: jdbc:h2:file:./processor-db;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        default-requeue-rejected: true
+        retry:
+          enabled: true
+          initial-interval: 1s
+          max-attempts: 3
+          max-interval: 5s
+          multiplier: 2
+
+logging:
+  file:
+    name: logs/order-processor-service.log
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5level [%thread] [correlationId=%X{correlationId:-none}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5level [%thread] [correlationId=%X{correlationId:-none}] %logger{36} - %msg%n"
