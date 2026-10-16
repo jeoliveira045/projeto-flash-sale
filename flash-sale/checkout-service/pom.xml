@@ -9,6 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>checkout-service</artifactId>
+    <properties>
+        <spring-boot.run.skip>false</spring-boot.run.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>br.com.flashsale</groupId>
@@ -55,6 +58,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>br.com.flashsale.checkout.CheckoutApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

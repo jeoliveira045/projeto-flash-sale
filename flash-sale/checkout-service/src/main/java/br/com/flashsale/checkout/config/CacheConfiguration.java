@@ -1,5 +1,6 @@
 package br.com.flashsale.checkout.config;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.Duration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,6 +18,7 @@ public class CacheConfiguration {
     @Bean
     CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         var serializer = new GenericJackson2JsonRedisSerializer();
+        serializer.configure(mapper -> mapper.registerModule(new JavaTimeModule()));
         var cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(5))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));

@@ -79,7 +79,8 @@ class CheckoutFlowIntegrationTest {
             ResponseEntity<OrderResponse> entity = http.exchange("/v1/orders/" + orderId, HttpMethod.GET,
                 new HttpEntity<>(headers), OrderResponse.class);
             OrderResponse response = entity.getBody();
-            if (response != null && expected.equals(response.status().name())) {
+            if (entity.getStatusCode().is2xxSuccessful() && response != null && response.status() != null
+                    && expected.equals(response.status().name())) {
                 return response;
             }
             Thread.sleep(100);

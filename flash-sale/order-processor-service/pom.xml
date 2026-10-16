@@ -9,6 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>order-processor-service</artifactId>
+    <properties>
+        <spring-boot.run.skip>false</spring-boot.run.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>br.com.flashsale</groupId>
@@ -22,6 +25,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,6 +50,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>br.com.flashsale.processor.OrderProcessorApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
